@@ -127,24 +127,61 @@
         }).catch(() => setTimeout(() => location.reload(), 1200));
     });
 
-   
+
+
+    
+    // BOTÓN NARANJA: CAMBIO DE ACEITE DE ILO
+    document.getElementById('btnRotar').addEventListener('click', () => {
+        if(!confirm("¿Confirmas el cambio físico de aceite en ILO? El contador volverá a 0.")) return;
+        document.getElementById('msg').textContent = "Guardando rotación en ILO...";
+        fetch(URL, {
+            method: 'POST', mode: 'cors', headers: {'Content-Type':'text/plain'},
+            body: JSON.stringify({ 
+                local: "ilo", // 👈 Obliga a Google a escribir en HISTORIAL_ILO
+                accion: "ROTAR_ACEITE", 
+                usuario: document.getElementById('usu').value, 
+                piezas_finales: baseLote 
+            })
+        }).then(() => {
+            document.getElementById('msg').textContent = "¡Lote de ILO cerrado con éxito!";
+            setTimeout(() => location.reload(), 1000);
+        }).catch(() => setTimeout(() => location.reload(), 1200));
+    });
+
+    // BOTÓN ROJO: REGISTRO DIARIO DE ILO
     document.getElementById('fVentas').addEventListener('submit', e => {
         e.preventDefault();
         document.getElementById('msg').textContent = "Guardando reporte diario (ILO)...";
+        
+        const pQ = document.getElementById('pQ');
+        const pE = document.getElementById('pE');
+        const pT = document.getElementById('pT');
+        const pV = document.getElementById('pV');
+        const pK = document.getElementById('pK');
+
+        const aQ = document.getElementById('aQ');
+        const aE = document.getElementById('aE');
+        const aT = document.getElementById('aT');
+        const aV = document.getElementById('aV');
+        const aK = document.getElementById('aK');
+
         fetch(URL, {
             method: 'POST', mode: 'no-cors', headers: {'Content-Type':'application/json'},
             body: JSON.stringify({
-                local: "ilo", // 👈 Esto le dice a Google que guarde en la pestaña de ILO
+                local: "ilo", // 👈 Obliga a Google a escribir en VENTAS_ILO
                 usuario: document.getElementById('usu').value, 
                 pollo_quedo: n(pQ), pollo_entro: n(pE), pollo_total: n(pT), pollo_venta: n(pV), pollo_queda: n(pK),
                 alitas_quedo: n(aQ), alitas_entro: n(aE), alitas_total: n(aT), alitas_venta: n(aV), alitas_queda: n(aK)
             })
         }).then(() => {
-            document.getElementById('msg').textContent = "¡Guardado con éxito!";
+            document.getElementById('msg').textContent = "¡Guardado con éxito en ILO!";
             setTimeout(() => location.reload(), 1200);
-        }).catch(() => { document.getElementById('msg').textContent = "Error al guardar."; });
+        }).catch(() => { 
+            document.getElementById('msg').textContent = "Error al guardar en ILO."; 
+        });
     });
 </script>
 </body>
 </html>
+
 
